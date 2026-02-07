@@ -1,19 +1,9 @@
 name: Build & Deploy Documentation
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "mkdocs.yml"
-      - "docs/**"
-      - "pyproject.toml"
-      - "uv.lock"
-      - ".github/workflows/docs.yml"
   push:
     branches:
-      - main
-  workflow_dispatch:
+      - master
 
 # Required permissions for GitHub Pages deployment
 permissions:
