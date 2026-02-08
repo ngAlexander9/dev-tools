@@ -3,7 +3,7 @@ name: Build & Deploy Documentation
 on:
   pull_request:
     branches:
-      - main
+      - master
     paths:
       - "mkdocs.yml"
       - "docs/**"
@@ -12,7 +12,7 @@ on:
       - ".github/workflows/docs.yml"
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 # Required permissions for GitHub Pages deployment
