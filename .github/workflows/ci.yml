@@ -1,9 +1,19 @@
 name: Build & Deploy Documentation
 
 on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "mkdocs.yml"
+      - "docs/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/docs.yml"
   push:
     branches:
-      - master
+      - main
+  workflow_dispatch:
 
 # Required permissions for GitHub Pages deployment
 permissions:
@@ -40,23 +50,8 @@ jobs:
       - name: Install dependencies
         run: uv sync
 
-      - name: Install jq for JSON processing
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       - name: Build Docs
         run: uv run mkdocs build --strict --verbose
-
-      - name: Clean up old artifacts
-        run: |
-          echo "Cleaning up old github-pages artifacts..."
-          gh api repos/${{ github.repository }}/actions/artifacts --per_page=100 | \
-          jq -r '.artifacts[] | select(.name == "github-pages") | .id' | \
-          while read artifact_id; do
-            echo "Deleting artifact $artifact_id"
-            gh api repos/${{ github.repository }}/actions/artifacts/$artifact_id -X DELETE
-          done || echo "No old artifacts found or cleanup failed"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
